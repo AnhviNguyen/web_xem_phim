@@ -1,4 +1,4 @@
-import React,{ useEffect} from 'react';
+import React,{ useContext, useEffect} from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {fetchDataFromApi} from "./utils/api";
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,14 +13,26 @@ import Details from "./pages/details/Details";
 import SearchResult from './pages/searchResult/SearchResult';
 import Explore from './pages/explore/Explore';
 import PageNotFound from './pages/404/PageNotFound';
+import { UserContext, UserProvider } from './auth/userContext';
+import { getUserInfo } from './auth/getUserInfo';
 
 function App() {
+  const { setUser } = useContext(UserContext);
+
+    useEffect(() => {
+        // Fetch user info on load
+        getUserInfo().then((data) => {
+            if (data!= null) {
+              console.log(data);
+              setUser(data);
+            }
+        });
+    }, []);
 
   //la 1 ham cua redux dung de gui action tu EVENT HANDLER sang Store cua redux
   const dispatch = useDispatch();
   //lay du lieu tu store cua redux va cap nhat vao UI
   const {url} = useSelector((state)=>state.home);
-  console.log(url);
 
   useEffect(()=>{
     fetchApiConfig();//invoke method
@@ -63,19 +75,27 @@ const genresCall = async ()=>{
 };
 
 
-  return (<BrowserRouter>
-  <Header/>
-    <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/:mediaType/:id' element={<Details/>}/>
-      <Route path='/search/:query' element={<SearchResult/>}/>
-      <Route path='/explore/:mediaType' element={<Explore/>}/>
-      <Route path="/login" element={<Login initialForm="login" />} />
-      <Route path="/register" element={<Login initialForm="register" />} />
-      <Route path='*' element={<PageNotFound/>}/>
-    </Routes>
-  <Footer/>
-  </BrowserRouter>)
+  return (
+   
+    <BrowserRouter>
+      <Header />
+      <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/:mediaType/:id' element={<Details />} />
+          <Route path='/search/:query' element={<SearchResult />} />
+          <Route path='/explore/:mediaType' element={<Explore />} />
+          <Route path="/login" element={<Login initialForm="login" />} />
+          <Route path="/register" element={<Login initialForm="register" />} />
+          <Route path='*' element={<PageNotFound />} />
+      </Routes>
+      <Footer />
+  </BrowserRouter>
+
+  )
 }
 
-export default App
+export default () => (
+  <UserProvider>
+      <App />
+  </UserProvider>
+);
