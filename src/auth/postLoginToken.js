@@ -3,6 +3,7 @@ export const postLoginToken = async idToken => {
     const path = '/v1/oauth/login';
   
     try {
+      console.log(`${API_URL}${path}`);
       const response = await fetch(`${API_URL}${path}`, {
         method: 'POST',
         credentials: 'include', 

@@ -3,6 +3,7 @@ export const getUserInfo = async () => {
     const path = '/v1/oauth/user/info';
   
     try {
+      console.log(`${API_URL}${path}`);
       const response = await fetch(`${API_URL}${path}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -10,6 +11,7 @@ export const getUserInfo = async () => {
         },
         credentials: 'include',
       });
+      
       if (!response.ok) throw new Error('bad server condition');
       return response.json();
     } catch (e) {

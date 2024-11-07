@@ -8,7 +8,6 @@ import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/login";
-import Register from "./pages/login/form/register";
 import Details from "./pages/details/Details";
 import SearchResult from './pages/searchResult/SearchResult';
 import Explore from './pages/explore/Explore';

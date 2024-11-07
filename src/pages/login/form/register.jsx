@@ -1,11 +1,13 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import {BiUser} from "react-icons/bi";
-import React, { useState } from 'react'; 
+import React, { useContext, useState } from 'react'; 
 import {AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from 'axios';
+import { UserContext } from '../../../auth/userContext';
 
 const register = () => {
+    const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => {
@@ -16,7 +18,7 @@ const register = () => {
     const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+   
 
     const handleRegistration = async (event) => {
         event.preventDefault(); // Prevent form submission
@@ -35,8 +37,8 @@ const register = () => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
             console.log('User registered:', response.data);
-
-            setRegistrationSuccess(true);
+            setUser(userData);
+            navigate('/');
         } catch (error) {
             console.error('Registration error:', error);
         }
@@ -76,7 +78,7 @@ const register = () => {
                             {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                         </span>
                     </div>
-                    <button  type='submit' className='w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-black hover:bg-orange-500 hover:text-white py-4 transition-colors duration-300 font-bold' type='submit'>Register</button>
+                    <button  type='submit' className='w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-black hover:bg-orange-500 hover:text-white py-4 transition-colors duration-300 font-bold' >Register</button>
                     <button type="button" onClick={handleLoginClick} className='flex justify-center ali'>
                         Already have an account? <span className='ml-5 text-orange-400'>Login</span>
                     </button>
